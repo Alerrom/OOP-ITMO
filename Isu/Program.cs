@@ -42,9 +42,9 @@ namespace Isu
             Group group3 = isu.AddGroup("M3104");
             Group group4 = isu.AddGroup("M3201");
 
-            Student s1 = isu.AddStudent(group3, "Mark");
-            Student s2 = isu.AddStudent(group3, "Lili");
-            Student s3 = isu.AddStudent(group4, "Petr");
+            Student s1 = isu.AddStudent(group3, "Marko");
+            Student s2 = isu.AddStudent(group3, "Lilo");
+            Student s3 = isu.AddStudent(group4, "Petro");
 
             Console.WriteLine("FindStudents by groupName");
 

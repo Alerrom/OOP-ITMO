@@ -20,14 +20,11 @@ namespace Isu.Entities
         public Group AddGroup(string name)
         {
             var groupName = new GroupName(name);
-            var group = new Group(groupName);
-            CourseNumber courseNumber = group.GetGroupName.GetCourse;
-            foreach (var g in _data[courseNumber])
-            {
-                if (g.GetGroupName.GetName == name) throw new IsuException("Group has already created");
-            }
+            if (FindGroup(groupName) != null)
+                throw new IsuException("Group has already created");
 
-            _data[courseNumber].Add(group);
+            var group = new Group(groupName);
+            _data[group.GetGroupName.GetCourse].Add(group);
             return group;
         }
 
@@ -39,9 +36,8 @@ namespace Isu.Entities
                 throw new IsuException();
             }
 
-            CourseNumber courseNumber = group.GetGroupName.GetCourse;
-            int groupIndex = _data[courseNumber].IndexOf(group);
-            _data[courseNumber][groupIndex].AddStudent(student);
+            int groupIndex = _data[group.GetGroupName.GetCourse].IndexOf(group);
+            _data[group.GetGroupName.GetCourse][groupIndex].AddStudent(student);
             return student;
         }
 
@@ -61,7 +57,7 @@ namespace Isu.Entities
                 }
             }
 
-            throw new IsuException();
+            throw new IsuException("Error: student is absent");
         }
 
         public Student FindStudent(string name)
@@ -115,7 +111,7 @@ namespace Isu.Entities
         {
             foreach (CourseNumber courseNumber in Enum.GetValues(typeof(CourseNumber)))
             {
-                foreach (var group in _data[courseNumber])
+                foreach (Group group in _data[courseNumber])
                 {
                     if (groupName.GetName == group.GetGroupName.GetName)
                         return group;
@@ -166,7 +162,7 @@ namespace Isu.Entities
             }
             else
             {
-                throw new IsuException();
+                throw new IsuException("Error: student can't change group");
             }
         }
     }

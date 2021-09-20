@@ -1,3 +1,4 @@
+using System;
 using Isu.Entities;
 using Isu.Tools;
 using NUnit.Framework;
@@ -34,7 +35,7 @@ namespace Isu.Tests
                 Group group = _isuService.AddGroup("M3201");
                 for (int i = 0; i < 26; i++)
                 {
-                    _isuService.AddStudent(group, "Alex");
+                    _isuService.AddStudent(group, "Alex" + Convert.ToString(i));
                 }
             });
         }
