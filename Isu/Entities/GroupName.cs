@@ -1,22 +1,19 @@
-﻿using System;
-using Isu.Tools;
+﻿using Isu.Tools;
 
 namespace Isu.Entities
 {
     public class GroupName
     {
-        private string _groupName;
-        private CourseNumber _courseNumber;
-
         public GroupName(string groupName)
         {
             if (!IsNameAllowed(groupName)) throw new IsuException(nameof(groupName));
-            _groupName = groupName;
-            _courseNumber = ToCourseNumberFromString(groupName[2]);
+            GetName = groupName;
+            GetCourse = ToCourseNumberFromString(groupName[2]);
         }
 
-        public string GetName => _groupName;
-        public CourseNumber GetCourse => _courseNumber;
+        public string GetName { get; }
+
+        public CourseNumber GetCourse { get; }
 
         private static bool IsNameAllowed(string name)
         {

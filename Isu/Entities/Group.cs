@@ -6,16 +6,15 @@ namespace Isu.Entities
 {
     public class Group
     {
-        private List<Student> _students = new List<Student>();
-        private int _maxNumberOfStudents = 25;
+        private readonly List<Student> _students = new List<Student>();
+        private readonly int _maxNumberOfStudents = 25;
 
-        private GroupName _groupName;
         internal Group(GroupName groupName)
         {
-            _groupName = groupName;
+            GetGroupName = groupName;
         }
 
-        public GroupName GetGroupName => _groupName;
+        public GroupName GetGroupName { get; }
 
         public List<Student> GetStudentsOfGroup => _students;
 

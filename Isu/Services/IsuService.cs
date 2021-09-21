@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Isu.Tools;
 
 namespace Isu.Entities
 {
     public class IsuService : IIsuService
     {
-        private Dictionary<CourseNumber, List<Group>> _data = new Dictionary<CourseNumber, List<Group>>(6);
+        private readonly Dictionary<CourseNumber, List<Group>> _data = new Dictionary<CourseNumber, List<Group>>(6);
 
         public IsuService()
         {
