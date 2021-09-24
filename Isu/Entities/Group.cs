@@ -1,34 +1,40 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Isu.Tools;
 
 namespace Isu.Entities
 {
     public class Group
     {
-        private readonly List<Student> _students = new List<Student>();
         private readonly int _maxNumberOfStudents = 25;
 
         internal Group(GroupName groupName)
         {
-            GetGroupName = groupName;
+            GroupName = groupName;
         }
 
-        public GroupName GetGroupName { get; }
+        public GroupName GroupName { get; }
 
-        public List<Student> GetStudentsOfGroup => _students;
+        public List<Student> StudentsOfGroup { get; } = new List<Student>();
 
         public void AddStudent(Student student)
         {
-            if (_students.Count == _maxNumberOfStudents)
-                throw new IsuException("Error: Max student per group reached");
+            if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReached();
 
-            _students.Add(student);
+            StudentsOfGroup.Add(student);
         }
 
-        public bool DeleteStudentById(int id)
+        public void DeleteStudentById(int id)
         {
-            return _students.Where(student => student.GetStudentId == id).Select(student => _students.Remove(student)).FirstOrDefault();
+            int tmpInd = 0;
+            for (int index = 0; index < StudentsOfGroup.Count; index++)
+            {
+                Student student = StudentsOfGroup[index];
+                if (student.StudentId != id) continue;
+                tmpInd = index;
+                break;
+            }
+
+            StudentsOfGroup.RemoveAt(tmpInd);
         }
     }
 }

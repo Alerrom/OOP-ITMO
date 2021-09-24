@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Isu.Entities;
 using Isu.Tools;
 
-namespace Isu.Entities
+namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
@@ -20,10 +21,10 @@ namespace Isu.Entities
         {
             var groupName = new GroupName(name);
             if (FindGroup(groupName) != null)
-                throw new IsuException("Group has already created");
+                throw new InvalidGroupName();
 
             var group = new Group(groupName);
-            _data[group.GetGroupName.GetCourse].Add(group);
+            _data[group.GroupName.Course].Add(group);
             return group;
         }
 
@@ -35,20 +36,20 @@ namespace Isu.Entities
                 throw new IsuException();
             }
 
-            int groupIndex = _data[group.GetGroupName.GetCourse].IndexOf(group);
-            _data[group.GetGroupName.GetCourse][groupIndex].AddStudent(student);
+            int groupIndex = _data[group.GroupName.Course].IndexOf(group);
+            _data[group.GroupName.Course][groupIndex].AddStudent(student);
             return student;
         }
 
         public Student GetStudent(int id)
         {
-            foreach (KeyValuePair<CourseNumber, List<Group>> pair in _data)
+            foreach (CourseNumber courseNumber in Course.AllCourses())
             {
-                foreach (Group group in pair.Value)
+                foreach (Group group in _data[courseNumber])
                 {
-                    foreach (Student student in group.GetStudentsOfGroup)
+                    foreach (Student student in group.StudentsOfGroup)
                     {
-                        if (student.GetStudentId == id)
+                        if (student.StudentId == id)
                         {
                             return student;
                         }
@@ -56,18 +57,18 @@ namespace Isu.Entities
                 }
             }
 
-            throw new IsuException("Error: student is absent");
+            throw new InvalidStudentId();
         }
 
         public Student FindStudent(string name)
         {
-            foreach (KeyValuePair<CourseNumber, List<Group>> pair in _data)
+            foreach (CourseNumber courseNumber in Course.AllCourses())
             {
-                foreach (Group group in pair.Value)
+                foreach (Group group in _data[courseNumber])
                 {
-                    foreach (Student student in group.GetStudentsOfGroup)
+                    foreach (Student student in group.StudentsOfGroup)
                     {
-                        if (student.GetStudentName == name)
+                        if (student.StudentName == name)
                         {
                             return student;
                         }
@@ -80,12 +81,12 @@ namespace Isu.Entities
 
         public List<Student> FindStudents(GroupName groupName)
         {
-            foreach (CourseNumber courseNumber in Enum.GetValues(typeof(CourseNumber)))
+            foreach (CourseNumber courseNumber in Course.AllCourses())
             {
                 foreach (Group group in _data[courseNumber])
                 {
-                    if (groupName.GetName == group.GetGroupName.GetName)
-                        return group.GetStudentsOfGroup;
+                    if (groupName.Name == group.GroupName.Name)
+                        return group.StudentsOfGroup;
                 }
             }
 
@@ -95,9 +96,11 @@ namespace Isu.Entities
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
             var answer = new List<Student>();
+
             foreach (Group group in _data[courseNumber])
             {
-                foreach (Student student in group.GetStudentsOfGroup)
+                Console.WriteLine(group.GroupName.Name);
+                foreach (Student student in group.StudentsOfGroup)
                 {
                     answer.Add(student);
                 }
@@ -108,11 +111,11 @@ namespace Isu.Entities
 
         public Group FindGroup(GroupName groupName)
         {
-            foreach (CourseNumber courseNumber in Enum.GetValues(typeof(CourseNumber)))
+            foreach (CourseNumber courseNumber in Course.AllCourses())
             {
                 foreach (Group group in _data[courseNumber])
                 {
-                    if (groupName.GetName == group.GetGroupName.GetName)
+                    if (groupName.Name == group.GroupName.Name)
                         return group;
                 }
             }
@@ -133,36 +136,25 @@ namespace Isu.Entities
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            if (FindStudent(student.GetStudentName).GetStudentName != null)
+            if (FindStudent(student.StudentName).StudentName == null)
+                throw new InvalidStudent();
+
+            foreach (CourseNumber courseNumber in Course.AllCourses())
             {
-                foreach (CourseNumber courseNumber in Enum.GetValues(typeof(CourseNumber)))
+                foreach (Group group in _data[courseNumber])
                 {
-                    foreach (Group group in _data[courseNumber])
+                    foreach (Student s in group.StudentsOfGroup)
                     {
-                        foreach (Student s in group.GetStudentsOfGroup)
+                        if (s.StudentId == student.StudentId)
                         {
-                            if (s.GetStudentId == student.GetStudentId)
-                            {
-                                group.DeleteStudentById(student.GetStudentId);
-                                break;
-                            }
+                            group.DeleteStudentById(student.StudentId);
+                            break;
                         }
                     }
                 }
+            }
 
-                foreach (CourseNumber courseNumber in Enum.GetValues(typeof(CourseNumber)))
-                {
-                    foreach (Group group in _data[courseNumber])
-                    {
-                        if (group.GetGroupName.GetName == newGroup.GetGroupName.GetName)
-                            group.AddStudent(student);
-                    }
-                }
-            }
-            else
-            {
-                throw new IsuException("Error: student can't change group");
-            }
+            newGroup.AddStudent(student);
         }
     }
 }

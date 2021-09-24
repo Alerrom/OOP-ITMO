@@ -8,12 +8,12 @@ namespace Isu.Entities
 
         public Student(string studentName)
         {
-            GetStudentName = studentName ?? throw new IsuException("Incorrect name: null string is not allowed");
-            GetStudentId = ++_counter;
+            StudentName = studentName ?? throw new IsuException("Incorrect name: null string is not allowed");
+            StudentId = ++_counter;
         }
 
-        public string GetStudentName { get; }
+        public string StudentName { get; }
 
-        public int GetStudentId { get; }
+        public int StudentId { get; }
     }
 }

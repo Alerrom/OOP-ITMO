@@ -6,14 +6,14 @@ namespace Isu.Entities
     {
         public GroupName(string groupName)
         {
-            if (!IsNameAllowed(groupName)) throw new IsuException(nameof(groupName));
-            GetName = groupName;
-            GetCourse = ToCourseNumberFromString(groupName[2]);
+            if (!IsNameAllowed(groupName)) throw new InvalidGroupName();
+            Name = groupName;
+            Course = ToCourseNumberFromString(groupName[2]);
         }
 
-        public string GetName { get; }
+        public string Name { get; }
 
-        public CourseNumber GetCourse { get; }
+        public CourseNumber Course { get; }
 
         private static bool IsNameAllowed(string name)
         {
