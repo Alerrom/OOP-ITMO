@@ -6,7 +6,7 @@ namespace Isu.Entities
     {
         public GroupName(string groupName)
         {
-            if (!IsNameAllowed(groupName)) throw new InvalidGroupName();
+            if (!IsNameAllowed(groupName)) throw new InvalidGroupNameException();
             Name = groupName;
             Course = ToCourseNumberFromString(groupName[2]);
         }

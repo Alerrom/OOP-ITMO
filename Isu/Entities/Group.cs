@@ -18,7 +18,7 @@ namespace Isu.Entities
 
         public void AddStudent(Student student)
         {
-            if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReached();
+            if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReachedException();
 
             StudentsOfGroup.Add(student);
         }
@@ -30,11 +30,8 @@ namespace Isu.Entities
             {
                 Student student = StudentsOfGroup[index];
                 if (student.StudentId != id) continue;
-                tmpInd = index;
-                break;
+                StudentsOfGroup.RemoveAt(tmpInd);
             }
-
-            StudentsOfGroup.RemoveAt(tmpInd);
         }
     }
 }
