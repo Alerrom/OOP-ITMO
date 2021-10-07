@@ -18,23 +18,20 @@ namespace Isu.Entities
 
         public void AddStudent(Student student)
         {
-            if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReached();
+            if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReachedException();
 
             StudentsOfGroup.Add(student);
         }
 
         public void DeleteStudentById(int id)
         {
-            int tmpInd = 0;
             for (int index = 0; index < StudentsOfGroup.Count; index++)
             {
                 Student student = StudentsOfGroup[index];
                 if (student.StudentId != id) continue;
-                tmpInd = index;
+                StudentsOfGroup.RemoveAt(index);
                 break;
             }
-
-            StudentsOfGroup.RemoveAt(tmpInd);
         }
     }
 }

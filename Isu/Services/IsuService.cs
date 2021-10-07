@@ -21,7 +21,7 @@ namespace Isu.Services
         {
             var groupName = new GroupName(name);
             if (FindGroup(groupName) != null)
-                throw new InvalidGroupName();
+                throw new InvalidGroupNameException();
 
             var group = new Group(groupName);
             _data[group.GroupName.Course].Add(group);
@@ -57,7 +57,7 @@ namespace Isu.Services
                 }
             }
 
-            throw new InvalidStudentId();
+            throw new InvalidStudentIdException();
         }
 
         public Student FindStudent(string name)
@@ -137,7 +137,7 @@ namespace Isu.Services
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
             if (FindStudent(student.StudentName).StudentName == null)
-                throw new InvalidStudent();
+                throw new InvalidStudentException();
 
             foreach (CourseNumber courseNumber in Course.AllCourses())
             {
