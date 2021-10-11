@@ -1,0 +1,17 @@
+﻿using System.Collections.Generic;
+using Shops.Entities;
+
+namespace Shops.Services
+{
+    public interface IShopManager
+    {
+        Shop CreateShop(string shopName, string shopAdress);
+        Item AddItem(string itemName);
+
+        void SupplyItem(Shop shop, Item item, int amount, float price);
+
+        void PurchaseItem(Customer customer, Item item, int amount);
+
+        Shop FindSuitableShop(Item item, int amount);
+    }
+}
