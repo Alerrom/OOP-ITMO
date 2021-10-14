@@ -6,32 +6,26 @@ namespace Shops.Entities
     public class Shop
     {
         private static int _counter = 0;
-        private int _id;
-        private List<RegisteredItem> _items;
+        private List<ShopProduct> _items;
 
         public Shop(string name, string adress)
         {
-            ShopAdress = adress ?? throw new InvalidShopNameException();
-            ShopName = name ?? throw new InvalidShopNameException();
-            _id = ++_counter;
-            _items = new List<RegisteredItem>();
+            Adress = adress ?? throw new InvalidShopNameException();
+            Name = name ?? throw new InvalidShopNameException();
+            Id = ++_counter;
+            _items = new List<ShopProduct>();
         }
 
-        public string ShopName { get; }
-        public string ShopAdress { get; }
-        public int ShopId => _id;
-
-        public List<RegisteredItem> GetRegisteredItems()
-        {
-            return _items;
-        }
+        public string Name { get; }
+        public string Adress { get; }
+        public int Id { get; }
 
         public float GetItemPrice(Item item)
         {
-            foreach (RegisteredItem registeredItem in _items)
+            foreach (ShopProduct product in _items)
             {
-                if (registeredItem.ItemName() == item.Name)
-                    return registeredItem.ItemPrice();
+                if (product.Name() == item.Name)
+                    return product.Price();
             }
 
             throw new FoundNotRegisteredItemException();
@@ -39,10 +33,10 @@ namespace Shops.Entities
 
         public int GetItemAmount(Item item)
         {
-            foreach (RegisteredItem registeredItem in _items)
+            foreach (ShopProduct product in _items)
             {
-                if (registeredItem.ItemName() == item.Name)
-                    return registeredItem.ItemAmount();
+                if (product.Name() == item.Name)
+                    return product.Amount();
             }
 
             throw new FoundNotRegisteredItemException();
@@ -50,61 +44,65 @@ namespace Shops.Entities
 
         public void AddItem(Item item, float price, int amount)
         {
-            _items.Add(new RegisteredItem(item, price, amount));
+            if (IsItemInShop(item))
+            {
+                foreach (ShopProduct product in _items)
+                {
+                    if (product.Name() != item.Name) continue;
+                    product.SetNewAmountAfterSupply(amount);
+                    break;
+                }
+            }
+
+            _items.Add(new ShopProduct(item, price, amount));
         }
 
         public void ChangeItemPrice(Item item, int newPrice)
         {
-            foreach (RegisteredItem registeredItem in _items)
+            foreach (ShopProduct product in _items)
             {
-                if (registeredItem.ItemName() == item.Name)
-                    registeredItem.SetNewPrice(newPrice);
-            }
-        }
-
-        public void AddExtraItem(Item item, int amount)
-        {
-            foreach (RegisteredItem registeredItem in _items)
-            {
-                if (registeredItem.ItemName() == item.Name)
-                {
-                    registeredItem.SetNewAmountAfterSupply(amount);
-                }
+                if (product.Name() != item.Name) continue;
+                product.SetNewPrice(newPrice);
+                break;
             }
         }
 
         public bool EnoughItemInShop(Item item, int amount)
         {
-            bool flag = false;
-            foreach (RegisteredItem registeredItem in _items)
-            {
-                if (item.Name != registeredItem.ItemName()) continue;
-                flag = true;
-                break;
-            }
-
-            if (!flag)
+            if (!IsItemInShop(item))
                 throw new FoundNotRegisteredItemException();
 
-            RegisteredItem tmp = null;
-            foreach (RegisteredItem registeredItem in _items)
+            foreach (ShopProduct product in _items)
             {
-                if (item.Name != registeredItem.ItemName())
+                if (item.Name != product.Name())
                     continue;
-                tmp = registeredItem;
-                break;
+                return product.Amount() >= amount;
             }
 
-            return tmp.ItemAmount() >= amount;
+            return false;
         }
 
         public void BuyItem(Item item, int amount)
         {
-            foreach (RegisteredItem registeredItem in _items)
+            foreach (ShopProduct product in _items)
             {
-                if (registeredItem.ItemName() == item.Name)
-                    registeredItem.SetNewAmountAfterBuy(amount);
+                if (product.Name() == item.Name)
+                {
+                    product.SetNewAmountAfterBuy(amount);
+                    break;
+                }
             }
+        }
+
+        private bool IsItemInShop(Item item)
+        {
+            foreach (ShopProduct product in _items)
+            {
+                if (item.Name != product.Name()) continue;
+                return true;
+            }
+
+            return false;
         }
     }
 }

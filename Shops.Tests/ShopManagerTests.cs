@@ -28,9 +28,12 @@ namespace Shops.Tests
             Assert.AreEqual(10, shop.GetItemAmount(milk));
             Assert.AreEqual(25, shop.GetItemAmount(chocolate));
             
-            var customer1 = new Customer(2500);
+            var customer1 = new Customer(600);
             _shopManager.PurchaseItem(customer1, milk, 10);
+            Assert.AreEqual(0.0f, customer1.Budget);
+            customer1.Salary(2500);
             _shopManager.PurchaseItem(customer1, chocolate, 25);
+            Assert.AreEqual(0.0f, customer1.Budget);
 
             Assert.AreEqual(0, shop.GetItemAmount(milk));
             Assert.AreEqual(0, shop.GetItemAmount(chocolate));
@@ -76,7 +79,7 @@ namespace Shops.Tests
             _shopManager.SupplyItem(shop2, milk, 100, 10.0f);
             _shopManager.SupplyItem(shop3, milk, 100, 10.0f);
 
-            Assert.Catch<ShopException>(() => 
+            Assert.Catch<NotEnoughAmountException>(() => 
             {
                 _shopManager.FindSuitableShop(milk, 200);
             });

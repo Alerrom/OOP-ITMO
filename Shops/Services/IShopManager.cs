@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Shops.Entities;
+﻿using Shops.Entities;
 
 namespace Shops.Services
 {

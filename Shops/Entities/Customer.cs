@@ -4,19 +4,25 @@ namespace Shops.Entities
 {
     public class Customer
     {
+        private float _budget;
         public Customer(float finance)
         {
-            Budget = finance;
+            _budget = finance;
         }
 
-        public float Budget { get; set; }
+        public float Budget => _budget;
 
-        public void ChangeFinance(float budget)
+        public void CashWithdrawal(float budget)
         {
-            if (Budget < budget)
-                throw new ShopException();
+            if (_budget < budget)
+                throw new BudgetLessThanZeroException();
 
-            Budget -= budget;
+            _budget -= budget;
+        }
+
+        public void Salary(float money)
+        {
+            _budget += money;
         }
     }
 }

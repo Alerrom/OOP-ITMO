@@ -1,29 +1,23 @@
-﻿using System.Threading;
-
-namespace Shops.Entities
+﻿namespace Shops.Entities
 {
-    public class RegisteredItem
+    public class ShopProduct
     {
-        private static int _counter = 0;
-        private Item _item;
+        private readonly Item _item;
         private float _price;
         private int _amount;
 
-        public RegisteredItem(Item item, float price, int amount)
+        public ShopProduct(Item item, float price, int amount)
         {
             _item = item;
             _price = price;
             _amount = amount;
-            ItemId = ++_counter;
         }
 
-        public int ItemId { get; }
+        public string Name() => _item.Name;
 
-        public string ItemName() => _item.Name;
+        public float Price() => _price;
 
-        public float ItemPrice() => _price;
-
-        public int ItemAmount() => _amount;
+        public int Amount() => _amount;
 
         public void SetNewPrice(float newPrice) => _price = newPrice;
 
