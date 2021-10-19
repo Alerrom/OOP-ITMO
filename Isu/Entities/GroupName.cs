@@ -17,8 +17,7 @@ namespace Isu.Entities
 
         private static bool IsNameAllowed(string name)
         {
-            return name.Length == 5 && name[0] == 'M' &&
-                   name[1] == '3' && !(name[2] < '1' || name[2] > '4');
+            return name.Length == 5 && !(name[2] < '1' || name[2] > '4');
         }
 
         private CourseNumber ToCourseNumberFromString(char c)
