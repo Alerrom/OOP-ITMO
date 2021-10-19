@@ -9,6 +9,7 @@ namespace IsuExtra
     {
         private static void Main()
         {
+            /*
             var service = new IsuServicesExtra();
             var aud403 = new Auditorium(403, Buildings.MainBuilding);
             var m3204 = new GroupWithLessons(new GroupName("M3204"));
@@ -27,6 +28,7 @@ namespace IsuExtra
 
             var timetable = new Timetable(studyDaysM3204);
             m3204.SetTimetable(timetable);
+            */
         }
     }
 }
