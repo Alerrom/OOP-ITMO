@@ -31,7 +31,7 @@ namespace Shops.Tests
             var customer1 = new Customer(600);
             _shopManager.PurchaseItem(customer1, milk, 10);
             Assert.AreEqual(0.0f, customer1.Budget);
-            customer1.Salary(2500);
+            customer1.Income(2500);
             _shopManager.PurchaseItem(customer1, chocolate, 25);
             Assert.AreEqual(0.0f, customer1.Budget);
 

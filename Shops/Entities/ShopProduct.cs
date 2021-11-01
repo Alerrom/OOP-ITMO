@@ -3,26 +3,24 @@
     public class ShopProduct
     {
         private readonly Item _item;
-        private float _price;
-        private int _amount;
 
         public ShopProduct(Item item, float price, int amount)
         {
             _item = item;
-            _price = price;
-            _amount = amount;
+            Price = price;
+            Amount = amount;
         }
 
-        public string Name() => _item.Name;
+        public string Name { get => _item.Name; }
 
-        public float Price() => _price;
+        public float Price { get; private set; }
 
-        public int Amount() => _amount;
+        public int Amount { get; private set;  }
 
-        public void SetNewPrice(float newPrice) => _price = newPrice;
+        public void SetNewPrice(float newPrice) => Price = newPrice;
 
-        public void SetNewAmountAfterSupply(int newAmount) => _amount = newAmount + _amount;
+        public void SetNewAmountAfterSupply(int newAmount) => Amount = newAmount + Amount;
 
-        public void SetNewAmountAfterBuy(int newAmount) => _amount = newAmount - _amount;
+        public void SetNewAmountAfterBuy(int newAmount) => Amount = newAmount - Amount;
     }
 }

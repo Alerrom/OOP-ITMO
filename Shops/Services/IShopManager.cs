@@ -4,7 +4,7 @@ namespace Shops.Services
 {
     public interface IShopManager
     {
-        Shop CreateShop(string shopName, string shopAdress);
+        Shop CreateShop(string shopName, string shopAddress);
         Item AddItem(string itemName);
 
         void SupplyItem(Shop shop, Item item, int amount, float price);

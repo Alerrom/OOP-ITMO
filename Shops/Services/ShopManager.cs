@@ -10,15 +10,15 @@ namespace Shops.Services
         private readonly List<Shop> _shops = new List<Shop>();
         private readonly List<Item> _items = new List<Item>();
 
-        public Shop CreateShop(string shopName, string shopAdress)
+        public Shop CreateShop(string shopName, string shopAddress)
         {
             foreach (Shop varShop in _shops)
             {
-                if (varShop.Name == shopName && varShop.Adress == shopAdress)
-                    throw new InvalidShopNameException();
+                if (varShop.Name == shopName && varShop.Address == shopAddress)
+                    throw new ShopAlreadyExistException();
             }
 
-            var shop = new Shop(shopName, shopAdress);
+            var shop = new Shop(shopName, shopAddress);
             _shops.Add(shop);
 
             return shop;
@@ -34,7 +34,7 @@ namespace Shops.Services
             return item;
         }
 
-        public void SupplyItem(Shop shop, Item item, int amount, float price = 1.0f)
+        public void SupplyItem(Shop shop, Item item, int amount, float price)
         {
             if (FindItem(item.Name) == null)
                 throw new FoundNotRegisteredItemException();

@@ -6,26 +6,26 @@ namespace Shops.Entities
     public class Shop
     {
         private static int _counter = 0;
-        private List<ShopProduct> _items;
+        private readonly List<ShopProduct> _items;
 
-        public Shop(string name, string adress)
+        public Shop(string name, string address)
         {
-            Adress = adress ?? throw new InvalidShopNameException();
+            Address = address ?? throw new InvalidShopNameException();
             Name = name ?? throw new InvalidShopNameException();
             Id = ++_counter;
             _items = new List<ShopProduct>();
         }
 
         public string Name { get; }
-        public string Adress { get; }
+        public string Address { get; }
         public int Id { get; }
 
         public float GetItemPrice(Item item)
         {
             foreach (ShopProduct product in _items)
             {
-                if (product.Name() == item.Name)
-                    return product.Price();
+                if (product.Name == item.Name)
+                    return product.Price;
             }
 
             throw new FoundNotRegisteredItemException();
@@ -35,8 +35,8 @@ namespace Shops.Entities
         {
             foreach (ShopProduct product in _items)
             {
-                if (product.Name() == item.Name)
-                    return product.Amount();
+                if (product.Name == item.Name)
+                    return product.Amount;
             }
 
             throw new FoundNotRegisteredItemException();
@@ -48,7 +48,7 @@ namespace Shops.Entities
             {
                 foreach (ShopProduct product in _items)
                 {
-                    if (product.Name() != item.Name) continue;
+                    if (product.Name != item.Name) continue;
                     product.SetNewAmountAfterSupply(amount);
                     break;
                 }
@@ -61,7 +61,7 @@ namespace Shops.Entities
         {
             foreach (ShopProduct product in _items)
             {
-                if (product.Name() != item.Name) continue;
+                if (product.Name != item.Name) continue;
                 product.SetNewPrice(newPrice);
                 break;
             }
@@ -74,9 +74,9 @@ namespace Shops.Entities
 
             foreach (ShopProduct product in _items)
             {
-                if (item.Name != product.Name())
+                if (item.Name != product.Name)
                     continue;
-                return product.Amount() >= amount;
+                return product.Amount >= amount;
             }
 
             return false;
@@ -86,7 +86,7 @@ namespace Shops.Entities
         {
             foreach (ShopProduct product in _items)
             {
-                if (product.Name() == item.Name)
+                if (product.Name == item.Name)
                 {
                     product.SetNewAmountAfterBuy(amount);
                     break;
@@ -98,8 +98,7 @@ namespace Shops.Entities
         {
             foreach (ShopProduct product in _items)
             {
-                if (item.Name != product.Name()) continue;
-                return true;
+                if (item.Name == product.Name) return true;
             }
 
             return false;
