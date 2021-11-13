@@ -50,7 +50,7 @@ namespace Shops.Entities
                 {
                     if (product.Name != item.Name) continue;
                     product.SetNewAmountAfterSupply(amount);
-                    break;
+                    return;
                 }
             }
 

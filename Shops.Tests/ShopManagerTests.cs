@@ -37,6 +37,12 @@ namespace Shops.Tests
 
             Assert.AreEqual(0, shop.GetItemAmount(milk));
             Assert.AreEqual(0, shop.GetItemAmount(chocolate));
+            
+            for (int i = 0; i < 20; ++i)
+            {
+                _shopManager.SupplyItem(shop,milk,1,20);
+            }
+            Assert.AreEqual(20,shop.GetItemAmount(milk));
         }
 
         [Test]
@@ -110,7 +116,7 @@ namespace Shops.Tests
             Shop shop = _shopManager.CreateShop("Магнит", "Купчино");
             Item milk = _shopManager.AddItem("Parmalat");
             Item chocolate = _shopManager.AddItem("Milka");
-            
+
             _shopManager.SupplyItem(shop, milk, 10, 60.0f);
             _shopManager.SupplyItem(shop, chocolate, 25, 100.0f);
 
