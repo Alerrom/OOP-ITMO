@@ -1,15 +1,15 @@
+using System;
 using System.IO;
 using Backups.Abstractions;
 
-namespace Backups.Entities.Storages
+namespace Backups.Entities.StorageSystem
 {
-    public class SeparateStorage : IStorage
+    public class SplitStorage : IStorage
     {
         private readonly string _filePath;
-
-        public SeparateStorage(string splitStorage)
+        public SplitStorage(string filePath)
         {
-            _filePath = splitStorage;
+            _filePath = filePath;
         }
 
         public string GetStorage() => Directory
