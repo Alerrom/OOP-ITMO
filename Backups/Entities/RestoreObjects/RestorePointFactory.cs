@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Backups.Abstractions;
 using Backups.Entities.BackupSystem;
 
@@ -11,7 +12,8 @@ namespace Backups.Entities.RestoreObjects
             {
                 var newPoint = new RestorePoint(
                     $"{bj.FullPath}\\RestorePoint_{bj.RestorePointsCount++}",
-                    bj.OriginalFilePath);
+                    bj.OriginalFilePath,
+                    repository.Files);
                 newPoint.CreateRestore();
 
                 bj.CreateRestorePoint(newPoint);

@@ -15,17 +15,9 @@ namespace Backups
             rep.CreateRestore(new RestorePointFactory());
             rep.AddFile("C:\\Users\\Александр\\Desktop\\a.txt");
             rep.AddFile("C:\\Users\\Александр\\Desktop\\b.txt");
-            rep.CreateRestore(new RestorePointFactory());
+            rep.DeleteFile("C:\\Users\\Александр\\Desktop\\b.txt");
 
             rep.ShowConfigurationInfo();
-
-            rep.Backups[0].GetInfo();
-            Console.WriteLine();
-            Console.WriteLine(rep.Backups[1].RestorePointsCount);
-
-            rep.Backups[0].GetInfo();
-            Console.WriteLine();
-            Console.WriteLine(rep.Backups[2].RestorePointsCount);
         }
     }
 }

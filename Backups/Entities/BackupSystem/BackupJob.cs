@@ -14,18 +14,17 @@ namespace Backups.Entities.BackupSystem
             OriginalFilePath = originalFilePath;
             RestorePoints = new List<RestorePoint>();
             StorageType = storageType;
-            JobObjects = new List<JobObject>();
             RestorePointsCount = 0;
         }
 
-        public Guid Id { get; }
-        public DateTime CreationTime { get; }
         public string FullPath { get; }
         public string OriginalFilePath { get; }
-        public List<RestorePoint> RestorePoints { get; }
-        public List<JobObject> JobObjects { get; }
         public int RestorePointsCount { get; set; }
         private StorageType StorageType { get; }
+        private Guid Id { get; }
+        private DateTime CreationTime { get; }
+
+        private List<RestorePoint> RestorePoints { get; }
 
         public void CreateRestorePoint(RestorePoint restorePoint) => RestorePoints.Add(restorePoint);
 

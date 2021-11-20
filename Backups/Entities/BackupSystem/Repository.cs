@@ -14,13 +14,15 @@ namespace Backups.Entities.BackupSystem
             StorageType = storageType;
             CommonStorage = commonStorage;
             Backups = new List<BackupJob>();
-            foreach (var file in fileList)
+            Files = fileList;
+            foreach (string file in fileList)
                 AddBackupJob(file, new StorageFactory(storageType, file, commonStorage).GetStorage(), storageType);
         }
 
         public List<BackupJob> Backups { get; }
-        public StorageType StorageType { get; }
-        public string CommonStorage { get; }
+        public List<string> Files { get; }
+        private StorageType StorageType { get; }
+        private string CommonStorage { get; }
 
         public void CreateRestore(RestorePointFactory restorePointFactory) => restorePointFactory.CreateRestore(this);
 
@@ -43,10 +45,22 @@ namespace Backups.Entities.BackupSystem
 
         public void AddFile(string fileName)
         {
+            Files.Add(fileName);
+
             Backups.Add(new BackupJob(
                 fileName,
                 new StorageFactory(StorageType, fileName, CommonStorage).GetStorage(),
                 StorageType));
+
+            CreateRestore(new RestorePointFactory());
+        }
+
+        public void DeleteFile(string fileName)
+        {
+            string file = Files.FirstOrDefault(f => f == fileName);
+            Files.Remove(file);
+
+            CreateRestore(new RestorePointFactory());
         }
 
         public void ShowConfigurationInfo()
