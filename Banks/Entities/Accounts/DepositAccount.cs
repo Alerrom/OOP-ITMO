@@ -8,28 +8,23 @@ namespace Banks.Entities.Accounts
         public DepositAccount(float balance, Client owner, float interestOnBalance, TimeSpan interval)
             : base(balance, owner, interestOnBalance)
         {
-            Interval = interval;
+            TimeInterval = interval;
         }
 
-        public override float InterestOnBalance
-        {
-            get
+        public override float InterestOnBalance =>
+            Balance switch
             {
-                return Balance switch
-                {
-                    < 50000 => 3,
-                    < 100000 => 3.5f,
-                    >= 100000 => 4,
-                    _ => 0
-                };
-            }
-        }
+                < 50000 => 3,
+                < 100000 => 3.5f,
+                >= 10000 => 4,
+                _ => 0
+            };
 
-        public TimeSpan Interval { get; private set; }
+        public TimeSpan TimeInterval { get; private set; }
 
         public void UpdateTimeInterval(TimeSpan interval)
         {
-            Interval = interval;
+            TimeInterval = interval;
         }
     }
 }

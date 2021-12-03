@@ -26,11 +26,11 @@ namespace Banks.Tests
                 .SetAddress("Вязьма")
                 .SetPassport("123456")
                 .GetClient();
-            var creditAccount = new CreditAccount(0, sasha, 2, 4000);
+            var creditAccount = new CreditAccount(4000, sasha, 2, 4000);
             tinkoff.AddClient(sasha);
             tinkoff.AssignAccountToClient(sasha, creditAccount);
-            tinkoff.Withdraw(creditAccount.Id, 4000);
-            Assert.AreEqual(-4000,creditAccount.Balance);
+            tinkoff.Withdraw(creditAccount.Id, 8000);
+            Assert.AreEqual(-4200,creditAccount.Balance);
         }
 
         [Test]

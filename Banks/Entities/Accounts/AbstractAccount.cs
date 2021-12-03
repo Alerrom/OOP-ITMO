@@ -14,13 +14,16 @@ namespace Banks.Entities.Accounts
             Id = Guid.NewGuid();
             InterestOnBalance = interestOnBalance;
             Caretaker = new Caretaker(this);
+            LastInterestUpdate = DateTime.Now;
         }
 
         public Guid Id { get; }
         public Client AccountOwner { get; }
         public virtual float InterestOnBalance { get; }
-        public float Balance { get; set; }
+        public virtual float Balance { get; set; }
         public Caretaker Caretaker { get; }
+
+        public DateTime LastInterestUpdate { get; }
 
         public IMemento Save()
         {
