@@ -26,6 +26,7 @@ namespace Banks.Entities.Banks
         public float BankLimitForDoubtfulAccount { get; }
         public DateTime LastAccountsUpdate { get; }
         public DateTime CurrentDate { get; }
+        public List<AbstractAccount> Accounts => _accounts;
 
         public void AddClient(Client client)
         {
