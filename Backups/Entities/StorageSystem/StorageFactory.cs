@@ -1,5 +1,6 @@
 using System;
 using Backups.Abstractions;
+using Backups.Tools;
 
 namespace Backups.Entities.StorageSystem
 {
@@ -22,7 +23,7 @@ namespace Backups.Entities.StorageSystem
             {
                 StorageType.Common => new SingleStorage(_filePath).GetStorage(),
                 StorageType.Split => new SplitStorage(_commonFolder).GetStorage(),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new InvalidStorageTypeException()
             };
         }
     }

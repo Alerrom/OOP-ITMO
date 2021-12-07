@@ -8,7 +8,6 @@ namespace Backups.Entities.BackupSystem
     {
         public BackupJob(string originalFilePath, string fullPath, StorageType storageType)
         {
-            Id = Guid.NewGuid();
             CreationTime = DateTime.Now;
             FullPath = fullPath;
             OriginalFilePath = originalFilePath;
@@ -21,15 +20,16 @@ namespace Backups.Entities.BackupSystem
         public string OriginalFilePath { get; }
         public int RestorePointsCount { get; set; }
         private StorageType StorageType { get; }
-        private Guid Id { get; }
         private DateTime CreationTime { get; }
 
         private List<RestorePoint> RestorePoints { get; }
 
         public void CreateRestorePoint(RestorePoint restorePoint) => RestorePoints.Add(restorePoint);
 
-        public void GetInfo() => Console.WriteLine($"BackupJob ID: {Id}\n" +
-                                                   $"Creation time: {CreationTime}\n" +
-                                                   $"Restore points amount: {RestorePoints.Count}");
+        public override string ToString()
+        {
+            return $"Creation time: {CreationTime}\n" +
+                   $"Restore points amount: {RestorePoints.Count}";
+        }
     }
 }

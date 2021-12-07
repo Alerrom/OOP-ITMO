@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Backups.Entities.RestoreObjects;
 using Backups.Entities.StorageSystem;
+using Backups.Tools;
 
 namespace Backups.Entities.BackupSystem
 {
@@ -37,7 +38,7 @@ namespace Backups.Entities.BackupSystem
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception($"{filePath} already exist");
+                throw new DataFileAlreadyExistsException($"{filePath} already exist");
             }
 
             Backups.Add(new BackupJob(filePath, backupPath, storageType));
@@ -63,12 +64,10 @@ namespace Backups.Entities.BackupSystem
             CreateRestore(new RestorePointFactory());
         }
 
-        public void ShowConfigurationInfo()
+        public override string ToString()
         {
-            Console.WriteLine("-----------------INFO---------------------");
-            Console.WriteLine($"Storage Type: {StorageType}");
-            Console.WriteLine($"Files for backup amount: {Backups.Count}");
-            Console.WriteLine("------------------------------------------");
+            return $"Storage Type: {StorageType}\n" +
+                   $"Files for backup amount: {Backups.Count}";
         }
     }
 }

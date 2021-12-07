@@ -7,13 +7,12 @@ namespace Backups.Entities.RestoreObjects
 {
     public class RestorePoint : RestorePointAbstract
     {
+        private List<string> _fileNames;
         public RestorePoint(string fullPath, string originalFilePath, List<string> fileNames)
             : base(fullPath, originalFilePath)
         {
-            FileNames = fileNames;
+            _fileNames = fileNames;
         }
-
-        private List<string> FileNames { get; }
 
         public override void CreateRestore()
         {
@@ -22,7 +21,7 @@ namespace Backups.Entities.RestoreObjects
                 FullPath,
                 new[] { "Restore point\n", CreationTime.ToString(CultureInfo.CurrentCulture), Name, DirectoryName, FullPath, OriginalFilePath });
 
-            foreach (string fileName in FileNames)
+            foreach (string fileName in _fileNames)
             {
                 File.AppendAllText(FullPath, "\n" + fileName);
             }

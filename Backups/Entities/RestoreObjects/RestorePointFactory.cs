@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Backups.Abstractions;
 using Backups.Entities.BackupSystem;
 
