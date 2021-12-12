@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Banks.Entities.Accounts;
 using Banks.Entities.Clients;
+using Banks.Entities.TimeProvider;
 using Banks.Tools;
 using Transaction = Banks.Entities.TransactionSystem.Transaction;
 
@@ -17,15 +18,14 @@ namespace Banks.Entities.Banks
             Id = Guid.NewGuid();
             Name = name;
             BankLimitForDoubtfulAccount = bankLimitForDoubtfulAccount;
-            LastAccountsUpdate = DateTime.Now;
-            CurrentDate = DateTime.Now;
+            BankTime = new BankTimeProvider(DateTime.Now, DateTime.Now);
         }
 
         public Guid Id { get; }
         public string Name { get; }
         public float BankLimitForDoubtfulAccount { get; }
-        public DateTime LastAccountsUpdate { get; }
-        public DateTime CurrentDate { get; }
+        public BankTimeProvider BankTime { get; }
+
         public List<AbstractAccount> Accounts => _accounts;
 
         public void AddClient(Client client)
@@ -46,6 +46,7 @@ namespace Banks.Entities.Banks
 
         public void TopUp(Guid accountId, float sum)
         {
+            UpdateAccountInterest();
             AbstractAccount account = _accounts.FirstOrDefault(account => account.Id == accountId);
             if (account == null)
                 throw new AccountDoesNotExistException();
@@ -55,6 +56,7 @@ namespace Banks.Entities.Banks
 
         public void Withdraw(Guid accountId, float sum)
         {
+            UpdateAccountInterest();
             AbstractAccount account = _accounts.FirstOrDefault(account => account.Id == accountId);
             if (account == null)
                 throw new AccountDoesNotExistException();
@@ -67,6 +69,7 @@ namespace Banks.Entities.Banks
 
         public void Transfer(Guid sourceId, Guid destinationId, float sum)
         {
+            UpdateAccountInterest();
             AbstractAccount source = _accounts.FirstOrDefault(account => account.Id == sourceId);
             if (source == null)
                 throw new AccountDoesNotExistException();
@@ -83,6 +86,7 @@ namespace Banks.Entities.Banks
 
         public void RejectTransaction(Guid sourceId, Guid destinationId)
         {
+            UpdateAccountInterest();
             AbstractAccount source = _accounts.FirstOrDefault(account => account.Id == sourceId);
             if (source == null)
                 throw new AccountDoesNotExistException();
@@ -94,12 +98,40 @@ namespace Banks.Entities.Banks
             new Transaction(source, destination).Undo();
         }
 
-        public string GetInfo()
+        public void UpdateAccounts()
+        {
+            UpdateAccountInterest();
+            UpdateAccountBalance();
+        }
+
+        public override string ToString()
         {
             return $"Id: {Id}\n" +
                    $"Name: {Name}\n" +
-                   $"Clients number {_clients.Count}\n" +
+                   $"Number of clients {_clients.Count}\n" +
                    $"Registered accounts: {_accounts.Count}\n";
+        }
+
+        private void UpdateAccountInterest()
+        {
+            foreach (AbstractAccount account in _accounts)
+            {
+                if ((BankTime.CurrentTime - account.LastInterestUpdate).Days < 1)
+                    continue;
+
+                account.ChargeInterestOnBalance((BankTime.CurrentTime - BankTime.LastUpdate).Days, BankTime.CurrentTime);
+            }
+        }
+
+        private void UpdateAccountBalance()
+        {
+            foreach (AbstractAccount account in _accounts)
+            {
+                account.UpdateBalance(account.CurrentInterest);
+                account.SetCurrentInterest(0);
+            }
+
+            BankTime.SetLastUpdate(BankTime.CurrentTime);
         }
     }
 }

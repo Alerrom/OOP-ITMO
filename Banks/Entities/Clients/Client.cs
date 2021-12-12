@@ -38,7 +38,7 @@ namespace Banks.Entities.Clients
             _accounts.Add(account);
         }
 
-        public string GetInfo()
+        public override string ToString()
         {
             return $"Name: {Name} {Surname}\n" +
                    $"Address: {Address}\n" +

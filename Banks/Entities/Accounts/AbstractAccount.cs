@@ -23,7 +23,14 @@ namespace Banks.Entities.Accounts
         public virtual float Balance { get; set; }
         public Caretaker Caretaker { get; }
 
-        public DateTime LastInterestUpdate { get; }
+        public DateTime LastInterestUpdate { get; private set; }
+        public float CurrentInterest { get; private set; }
+
+        public void ChargeInterestOnBalance(int days, DateTime updateTime)
+        {
+            CurrentInterest += Balance * days * InterestOnBalance / 365 / 100;
+            LastInterestUpdate = updateTime;
+        }
 
         public IMemento Save()
         {
@@ -38,7 +45,17 @@ namespace Banks.Entities.Accounts
             Balance = memento.GetState();
         }
 
-        public string GetInfo()
+        public void UpdateBalance(float sum)
+        {
+            Balance += sum;
+        }
+
+        public void SetCurrentInterest(float interest)
+        {
+            CurrentInterest = interest;
+        }
+
+        public override string ToString()
         {
             return $"Owner: {AccountOwner.Name} {AccountOwner.Surname}\n" +
                    $"Id: {Id}\n" +

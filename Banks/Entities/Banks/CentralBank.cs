@@ -44,6 +44,15 @@ namespace Banks.Entities.Banks
             new Transaction(source, destination).Undo();
         }
 
+        public void TimeTravel(DateTime future)
+        {
+            foreach (Bank bank in _banks)
+            {
+                bank.BankTime.Change(future);
+                bank.UpdateAccounts();
+            }
+        }
+
         private List<AbstractAccount> AllAccounts()
         {
             var ans = new List<AbstractAccount>();
