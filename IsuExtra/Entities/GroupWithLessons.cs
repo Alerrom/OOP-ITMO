@@ -19,14 +19,14 @@ namespace IsuExtra.Entities
 
         public GroupName GroupName { get; }
 
-        public List<ProStudent> StudentsOfGroup => _students;
+        public IReadOnlyCollection<ProStudent> StudentsOfGroup => _students;
         public Timetable Timetable => _timetable;
 
         public void AddStudent(ProStudent student)
         {
             if (StudentsOfGroup.Count == _maxNumberOfStudents) throw new MaxNumberOfStudentsReachedException();
 
-            StudentsOfGroup.Add(student);
+            _students.Add(student);
             student.AddGroupTimetable(_timetable);
         }
 

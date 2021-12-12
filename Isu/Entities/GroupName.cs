@@ -1,9 +1,14 @@
-﻿using Isu.Tools;
+﻿using System;
+using Isu.Tools;
 
 namespace Isu.Entities
 {
     public class GroupName
     {
+        private const int MAXLENGTHOFGROUPNAME = 5;
+        private const char MINCOURSENUMBER = '1';
+        private const char MAXCOURSENUMBER = '4';
+
         public GroupName(string groupName)
         {
             if (!IsNameAllowed(groupName)) throw new InvalidGroupNameException();
@@ -17,12 +22,12 @@ namespace Isu.Entities
 
         private static bool IsNameAllowed(string name)
         {
-            return name.Length == 5 && !(name[2] < '1' || name[2] > '4');
+            return name.Length == MAXLENGTHOFGROUPNAME && !(name[2] < MINCOURSENUMBER || name[2] > MAXCOURSENUMBER);
         }
 
         private CourseNumber ToCourseNumberFromString(char c)
         {
-            return (CourseNumber)(int)(c - '0');
+            return (CourseNumber)(c - '0');
         }
     }
 }
