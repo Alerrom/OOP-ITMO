@@ -1,4 +1,3 @@
-using System.IO;
 using Backups.Abstractions;
 
 namespace Backups.Entities.StorageSystem

@@ -1,4 +1,4 @@
-namespace Backups.Entities.VirtualFileSystem
+namespace Backups.Entities.Vfs
 {
     public interface IFile : IStorageObject
     {
