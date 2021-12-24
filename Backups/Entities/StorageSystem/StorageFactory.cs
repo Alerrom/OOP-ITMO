@@ -1,9 +1,8 @@
-using Backups.Abstractions;
 using Backups.Tools;
 
 namespace Backups.Entities.StorageSystem
 {
-    public class StorageFactory : IStorage
+    public class StorageFactory
     {
         private readonly StorageType _storageType;
         private readonly string _filePath;
@@ -21,7 +20,8 @@ namespace Backups.Entities.StorageSystem
             return _storageType switch
             {
                 StorageType.Common => new SingleStorage(_filePath).GetStorage(),
-                StorageType.Split => new SplitStorage(_commonFolder).GetStorage(),
+
+                // StorageType.Split => new SplitStorage(_commonFolder).GetStorage(),
                 _ => throw new InvalidStorageTypeException()
             };
         }

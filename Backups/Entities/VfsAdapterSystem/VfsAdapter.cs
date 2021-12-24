@@ -2,7 +2,7 @@ using System;
 using Backups.Entities.Vfs;
 using Backups.Entities.Vfs.Impl;
 
-namespace Backups.Entities.VfsAdapter
+namespace Backups.Entities.VfsAdapterSystem
 {
     public class VfsAdapter : IVfsAdapter
     {
@@ -46,6 +46,28 @@ namespace Backups.Entities.VfsAdapter
                 {
                     curDir.AddObject(new File(dirName));
                 }
+            }
+        }
+
+        public void AddContentOnFile(string path, string content)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                curDir = curDir.FindDir(dirName);
+            }
+        }
+
+        public void ClearContentOnFile(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                curDir = curDir.FindDir(dirName);
             }
         }
 

@@ -7,13 +7,13 @@ namespace Backups.Entities.Vfs.Impl
 {
     public class Directory : IDirectory
     {
-        private readonly List<IStorageObject> _objects;
+        private readonly List<File> _objects;
         private readonly List<Directory> _directories;
 
         public Directory(string name)
         {
             Name = name;
-            _objects = new List<IStorageObject>();
+            _objects = new List<File>();
             _directories = new List<Directory>();
         }
 
@@ -36,7 +36,7 @@ namespace Backups.Entities.Vfs.Impl
             _directories.Add(dir);
         }
 
-        public void AddObject(IStorageObject obj)
+        public void AddObject(File obj)
         {
             if (CheckObject(obj))
                 throw new FileAlreadyExistsException(obj.Name);
@@ -50,7 +50,7 @@ namespace Backups.Entities.Vfs.Impl
             _directories.Remove(dir);
         }
 
-        public void DeleteObject(IStorageObject obj)
+        public void DeleteObject(File obj)
         {
             if (!CheckObject(obj))
                 throw new FileDoesNotExistException(obj.Name);
@@ -62,7 +62,7 @@ namespace Backups.Entities.Vfs.Impl
             return _directories.FirstOrDefault(varDir => varDir.Name == dirName);
         }
 
-        public IStorageObject FindObject(string objName)
+        public File FindObject(string objName)
         {
             return _objects.FirstOrDefault(varObjName => varObjName.Name == objName);
         }

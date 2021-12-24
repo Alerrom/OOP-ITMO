@@ -36,9 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions" />
-    <Folder Include="Entities\BackupSystem" />
-    <Folder Include="Entities\RestoreObjects" />
     <Folder Include="Entities\StorageSystem" />
   </ItemGroup>
 

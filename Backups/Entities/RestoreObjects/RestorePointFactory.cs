@@ -1,22 +1,11 @@
-using Backups.Abstractions;
-using Backups.Entities.BackupSystem;
+using Backups.Entities.VfsAdapterSystem;
 
 namespace Backups.Entities.RestoreObjects
 {
-    public class RestorePointFactory : IRestore
+    public class RestorePointFactory
     {
-        public void CreateRestore(Repository repository)
+        public void CreateRestore(string name, VfsAdapter adapterSystem)
         {
-            foreach (BackupJob bj in repository.Backups)
-            {
-                var newPoint = new RestorePoint(
-                    $"{bj.FullPath}\\RestorePoint_{bj.RestorePointsCount++}",
-                    bj.OriginalFilePath,
-                    repository.Files);
-                newPoint.CreateRestore();
-
-                bj.CreateRestorePoint(newPoint);
-            }
         }
     }
 }

@@ -1,30 +1,25 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using Backups.Abstractions;
+using Backups.Entities.VfsAdapterSystem;
 
 namespace Backups.Entities.RestoreObjects
 {
     public class RestorePoint : RestorePointAbstract
     {
-        private List<string> _fileNames;
-        public RestorePoint(string fullPath, string originalFilePath, List<string> fileNames)
-            : base(fullPath, originalFilePath)
+        private VfsAdapter _adapter;
+
+        public RestorePoint(string name, List<string> fileNames, StorageType type, VfsAdapter adapter)
+            : base(name)
         {
-            _fileNames = fileNames;
+            _adapter = adapter;
         }
 
         public override void CreateRestore()
         {
-            File.Create(FullPath).Close();
-            File.WriteAllLines(
-                FullPath,
-                new[] { "Restore point\n", CreationTime.ToString(CultureInfo.CurrentCulture), Name, DirectoryName, FullPath, OriginalFilePath });
+            _adapter.AddFile(@"C:\Backup\" + Name);
+            string content = @"C:\Backup\" + Name;
 
-            foreach (string fileName in _fileNames)
-            {
-                File.AppendAllText(FullPath, "\n" + fileName);
-            }
+            // _adapter.AddContentOnFile(@"C:\Backup\" + Name, content);
         }
     }
 }

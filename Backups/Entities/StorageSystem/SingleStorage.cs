@@ -1,8 +1,6 @@
-using Backups.Abstractions;
-
 namespace Backups.Entities.StorageSystem
 {
-    public class SingleStorage : IStorage
+    public class SingleStorage
     {
         private readonly string _singleStorage;
         public SingleStorage(string singleStorage)

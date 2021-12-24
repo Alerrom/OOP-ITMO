@@ -1,8 +1,9 @@
-namespace Backups.Tools;
-
-public class FileAlreadyExistsException : BackupsException
+namespace Backups.Tools
 {
-    public FileAlreadyExistsException(string path)
-        : base(path)
-    { }
+    public class FileAlreadyExistsException : BackupsException
+    {
+        public FileAlreadyExistsException(string path)
+            : base(path)
+        { }
+    }
 }

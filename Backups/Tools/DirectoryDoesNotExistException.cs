@@ -1,8 +1,9 @@
-namespace Backups.Tools;
-
-public class DirectoryDoesNotExistException : BackupsException
+namespace Backups.Tools
 {
-    public DirectoryDoesNotExistException(string path)
-        : base(path)
-    { }
+    public class DirectoryDoesNotExistException : BackupsException
+    {
+        public DirectoryDoesNotExistException(string path)
+            : base(path)
+        { }
+    }
 }
