@@ -25,18 +25,9 @@
 
   <ItemGroup>
     <Compile Remove="Entities\RestoreObjects\RestorePointFactory.cs" />
-    <Compile Remove="Entities\StorageSystem\StorageFactory.cs" />
-    <Compile Remove="Entities\StorageSystem\SingleStorage.cs" />
     <Compile Remove="Entities\BackupSystem\Repository.cs" />
     <Compile Remove="Abstractions\RestorePointAbstract.cs" />
     <Compile Remove="Abstractions\IStorage.cs" />
-    <Compile Remove="Tools\DataFileAlreadyExistsException.cs" />
-    <Compile Remove="Tools\InvalidStorageTypeException.cs" />
-    <Compile Remove="Tools\ArgumentOutOfRangeException.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entities\StorageSystem" />
   </ItemGroup>
 
 </Project>

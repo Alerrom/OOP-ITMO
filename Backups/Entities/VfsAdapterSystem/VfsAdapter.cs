@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Backups.Entities.Vfs;
 using Backups.Entities.Vfs.Impl;
 
@@ -56,8 +57,33 @@ namespace Backups.Entities.VfsAdapterSystem
             foreach (string dirName in sep)
             {
                 if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) == null)
+                {
+                    curDir.FindObject(dirName).Write(new UTF8Encoding(true).GetBytes(content));
+                    return;
+                }
+
                 curDir = curDir.FindDir(dirName);
             }
+        }
+
+        public string ReadContentOnFile(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) == null)
+                {
+                    var utf8 = new UTF8Encoding(true);
+                    return utf8.GetString(curDir.FindObject(dirName).Read());
+                }
+
+                curDir = curDir.FindDir(dirName);
+            }
+
+            return null;
         }
 
         public void ClearContentOnFile(string path)
@@ -67,6 +93,12 @@ namespace Backups.Entities.VfsAdapterSystem
             foreach (string dirName in sep)
             {
                 if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) == null)
+                {
+                    curDir.FindObject(dirName).Write(Array.Empty<byte>());
+                    return;
+                }
+
                 curDir = curDir.FindDir(dirName);
             }
         }
