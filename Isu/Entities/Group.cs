@@ -7,7 +7,7 @@ namespace Isu.Entities
     {
         private readonly int _maxNumberOfStudents = 25;
 
-        internal Group(GroupName groupName)
+        public Group(GroupName groupName)
         {
             GroupName = groupName;
         }
