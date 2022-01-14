@@ -1,29 +1,29 @@
+using System.Collections.Generic;
 using Backups.Tools;
 
 namespace Backups.Entities.StorageSystem
 {
+    /*
     public class StorageFactory
     {
         private readonly StorageType _storageType;
-        private readonly string _filePath;
-        private readonly string _commonFolder;
+        private readonly List<string> _fileNames;
 
-        public StorageFactory(StorageType storageType, string filePath, string commonFolder)
+        public StorageFactory(StorageType storageType, List<string> fileNames)
         {
             _storageType = storageType;
-            _filePath = filePath;
-            _commonFolder = commonFolder;
+            _fileNames = fileNames;
         }
 
         public string GetStorage()
         {
             return _storageType switch
             {
-                StorageType.Common => new SingleStorage(_filePath).GetStorage(),
-
-                // StorageType.Split => new SplitStorage(_commonFolder).GetStorage(),
+                StorageType.Common => new SingleStorage("_fileNames").GetStorage(),
+                StorageType.Split => new SplitStorage("_fileNames").GetStorage(),
                 _ => throw new InvalidStorageTypeException()
             };
         }
     }
+    */
 }

@@ -4,12 +4,14 @@ namespace Backups.Entities.Vfs.Impl
     {
         private byte[] _content = System.Array.Empty<byte>();
 
-        public File(string name)
+        public File(string name, string fullPath)
         {
             Name = name;
+            FullPath = fullPath;
         }
 
         public string Name { get; }
+        public string FullPath { get; }
 
         public byte[] Read()
         {

@@ -27,14 +27,13 @@ namespace Backups
             adapter.AddContentOnFile(@"C:\programming\Aleksandr\dog.png", "pups");
             adapter.AddContentOnFile(@"C:\programming\Aleksandr\dog.png", "dogs");
 
-            Console.WriteLine(adapter.ReadContentOnFile(@"C:\programming\OOP\c.txt"));
-            Console.WriteLine(adapter.ReadContentOnFile(@"C:\programming\Aleksandr\dog.png"));
-
             var backupJob = new BackupJob(adapter, StorageType.Common);
             backupJob.AddJobObject(@"C:\programming\Aleksandr\dog.png");
             backupJob.AddJobObject(@"C:\programming\Aleksandr\cat.png");
             backupJob.CreateRestorePoint();
-            adapter.ShowDir(@"C:\Backup");
+            backupJob.DeleteJobObject(@"C:\programming\Aleksandr\cat.png");
+
+            Console.WriteLine(adapter.ReadContentOnFile(@"C:\Backup\RestorePoint_2\dog.png_2"));
         }
     }
 }

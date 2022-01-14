@@ -12,7 +12,5 @@ namespace Backups.Entities.RestoreObjects
 
         public DateTime CreationTime { get; }
         public string Name { get; }
-
-        public abstract void CreateRestore();
     }
 }

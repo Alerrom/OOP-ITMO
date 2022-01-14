@@ -37,12 +37,22 @@ namespace Backups.Entities.BackupSystem
         public void DeleteJobObject(string path)
         {
             _jobObjects.Remove(path);
+            CreateRestorePoint();
         }
 
         public void CreateRestorePoint()
         {
             string name = "RestorePoint_" + (_restorePoints.Count + 1);
-            _restorePoints.Add(new RestorePoint(name, _jobObjects, StorageType, _adapter));
+            var rp = new RestorePoint(name, _jobObjects, StorageType);
+            _restorePoints.Add(rp);
+            _adapter.AddDirectory($@"C:\Backup\{rp.Name}");
+            foreach (string fName in rp.Files)
+            {
+                string[] sep = fName.Split(@"\");
+
+                _adapter.AddFile($@"C:\Backup\{rp.Name}\{sep[^1]}");
+                _adapter.AddContentOnFile($@"C:\Backup\{rp.Name}\{sep[^1]}", fName);
+            }
         }
 
         public override string ToString()

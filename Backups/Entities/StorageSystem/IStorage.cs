@@ -1,6 +1,7 @@
-namespace Backups.Entities.StorageSystem;
-
-public interface IStorage
+namespace Backups.Entities.StorageSystem
 {
-    string GetStorage();
+    public interface IStorage
+    {
+        string GetStorage();
+    }
 }

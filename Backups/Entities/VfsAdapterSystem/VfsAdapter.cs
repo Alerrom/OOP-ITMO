@@ -45,7 +45,7 @@ namespace Backups.Entities.VfsAdapterSystem
                 }
                 else
                 {
-                    curDir.AddObject(new File(dirName));
+                    curDir.AddObject(new File(dirName, path));
                 }
             }
         }
