@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Backups.Entities.RestoreObjects;
+using Backups.Entities.Vfs.Impl;
 using Backups.Entities.VfsAdapterSystem;
 
 namespace Backups.Entities.BackupSystem
@@ -8,7 +9,6 @@ namespace Backups.Entities.BackupSystem
     public class BackupJob : IBackupJob
     {
         private readonly List<string> _jobObjects;
-        private List<RestorePoint> _restorePoints;
         private VfsAdapter _adapter;
 
         public BackupJob(VfsAdapter adapter, StorageType storageType)
@@ -16,11 +16,13 @@ namespace Backups.Entities.BackupSystem
             _adapter = adapter;
             StorageType = storageType;
             CreationTime = DateTime.Now;
-            _restorePoints = new List<RestorePoint>();
+            RestorePoints = new List<RestorePoint>();
             _jobObjects = new List<string>();
         }
 
         public DateTime CreationTime { get; }
+        public List<RestorePoint> RestorePoints { get; }
+
         public IReadOnlyList<string> JobObjects => _jobObjects;
         public StorageType StorageType { get; private set; }
 
@@ -42,23 +44,36 @@ namespace Backups.Entities.BackupSystem
 
         public void CreateRestorePoint()
         {
-            string name = "RestorePoint_" + (_restorePoints.Count + 1);
+            string name = "RestorePoint_" + (RestorePoints.Count + 1);
             var rp = new RestorePoint(name, _jobObjects, StorageType);
-            _restorePoints.Add(rp);
+            RestorePoints.Add(rp);
             _adapter.AddDirectory($@"C:\Backup\{rp.Name}");
-            foreach (string fName in rp.Files)
-            {
-                string[] sep = fName.Split(@"\");
 
-                _adapter.AddFile($@"C:\Backup\{rp.Name}\{sep[^1]}");
-                _adapter.AddContentOnFile($@"C:\Backup\{rp.Name}\{sep[^1]}", fName);
+            if (StorageType == StorageType.Split)
+            {
+                foreach (string fName in rp.Files)
+                {
+                    string[] sep = fName.Split(@"\");
+
+                    _adapter.AddFile($@"C:\Backup\{rp.Name}\{sep[^1]}");
+                    string content = _adapter.ReadContentOnFile(fName);
+                    _adapter.AddContentOnFile($@"C:\Backup\{rp.Name}\{sep[^1]}", content);
+                }
+            }
+            else if (StorageType == StorageType.Common)
+            {
+                Archive archive = _adapter.AddArchive($@"C:\Backup\{rp.Name}\Archive_{RestorePoints.Count + 1}.zip");
+                foreach (string file in rp.Files)
+                {
+                    archive.Add(_adapter.FindFile(file));
+                }
             }
         }
 
         public override string ToString()
         {
             return $"Creation time: {CreationTime}\n" +
-                   $"Restore points amount: {_restorePoints.Count}";
+                   $"Restore points amount: {RestorePoints.Count}";
         }
     }
 }

@@ -14,25 +14,7 @@ namespace Backups.Entities.VfsAdapterSystem
             _virtualFileSystem = new VirtualFileSystem();
         }
 
-        public void AddDirectory(string path)
-        {
-            string[] sep = path.Split(@"\");
-            Directory curDir = _virtualFileSystem.GetRoot();
-            foreach (string dirName in sep)
-            {
-                if (dirName == "C:") continue;
-                if (curDir.FindDir(dirName) == null)
-                {
-                    curDir.AddDirectory(new Directory(dirName));
-                }
-                else
-                {
-                    curDir = curDir.FindDir(dirName);
-                }
-            }
-        }
-
-        public void AddFile(string path)
+        public Directory AddDirectory(string path)
         {
             string[] sep = path.Split(@"\");
             Directory curDir = _virtualFileSystem.GetRoot();
@@ -45,9 +27,57 @@ namespace Backups.Entities.VfsAdapterSystem
                 }
                 else
                 {
-                    curDir.AddObject(new File(dirName, path));
+                    var dir = new Directory(dirName);
+                    curDir.AddDirectory(dir);
+                    return dir;
                 }
             }
+
+            return null;
+        }
+
+        public File AddFile(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) != null)
+                {
+                    curDir = curDir.FindDir(dirName);
+                }
+                else
+                {
+                    var file = new File(dirName, path);
+                    curDir.AddObject(file);
+                    return file;
+                }
+            }
+
+            return null;
+        }
+
+        public Archive AddArchive(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) != null)
+                {
+                    curDir = curDir.FindDir(dirName);
+                }
+                else
+                {
+                    var archive = new Archive(dirName, path);
+                    curDir.AddArchive(archive);
+                    return archive;
+                }
+            }
+
+            return null;
         }
 
         public void AddContentOnFile(string path, string content)
@@ -121,6 +151,45 @@ namespace Backups.Entities.VfsAdapterSystem
             }
         }
 
+        public File FindFile(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) != null)
+                {
+                    curDir = curDir.FindDir(dirName);
+                }
+                else
+                {
+                    return curDir.FindObject(dirName);
+                }
+            }
+
+            return null;
+        }
+
+        public void DeleteArchive(string path)
+        {
+            string[] sep = path.Split(@"\");
+            Directory curDir = _virtualFileSystem.GetRoot();
+            foreach (string dirName in sep)
+            {
+                if (dirName == "C:") continue;
+                if (curDir.FindDir(dirName) != null)
+                {
+                    curDir = curDir.FindDir(dirName);
+                }
+                else
+                {
+                    curDir.DeleteArchive(curDir.FindArchive(dirName));
+                }
+            }
+        }
+
+        /*
         public void ShowDir(string path)
         {
             string[] sep = path.Split(@"\");
@@ -152,5 +221,6 @@ namespace Backups.Entities.VfsAdapterSystem
                 Console.WriteLine(obj.Name);
             }
         }
+        */
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Backups.Tools;
@@ -8,6 +7,7 @@ namespace Backups.Entities.Vfs.Impl
     public class Directory : IDirectory
     {
         private readonly List<File> _objects;
+        private readonly List<Archive> _archives;
         private readonly List<Directory> _directories;
 
         public Directory(string name)
@@ -15,6 +15,7 @@ namespace Backups.Entities.Vfs.Impl
             Name = name;
             _objects = new List<File>();
             _directories = new List<Directory>();
+            _archives = new List<Archive>();
         }
 
         public string Name { get; }
@@ -27,6 +28,11 @@ namespace Backups.Entities.Vfs.Impl
         public IReadOnlyList<IStorageObject> ListObjects()
         {
             return _objects;
+        }
+
+        public IReadOnlyList<Archive> ListArchive()
+        {
+            return _archives;
         }
 
         public void AddDirectory(Directory dir)
@@ -50,6 +56,20 @@ namespace Backups.Entities.Vfs.Impl
             _directories.Remove(dir);
         }
 
+        public void AddArchive(Archive archive)
+        {
+            if (CheckArchive(archive))
+                throw new ArchiveAlreadyExistsException(archive.Name);
+            _archives.Add(archive);
+        }
+
+        public void DeleteArchive(Archive archive)
+        {
+            if (!CheckArchive(archive))
+                throw new ArchiveDoesNotExistException(archive.Name);
+            _archives.Remove(archive);
+        }
+
         public void DeleteObject(File obj)
         {
             if (!CheckObject(obj))
@@ -67,6 +87,11 @@ namespace Backups.Entities.Vfs.Impl
             return _objects.FirstOrDefault(varObjName => varObjName.Name == objName);
         }
 
+        public Archive FindArchive(string archiveName)
+        {
+            return _archives.FirstOrDefault(varObjName => varObjName.Name == archiveName);
+        }
+
         private bool CheckObject(IStorageObject storageObject)
         {
             return _objects.Any(obj => obj.Name == storageObject.Name);
@@ -75,6 +100,11 @@ namespace Backups.Entities.Vfs.Impl
         private bool CheckDirectory(IDirectory directory)
         {
             return _objects.Any(obj => obj.Name == directory.Name);
+        }
+
+        private bool CheckArchive(IArchive archive)
+        {
+            return _archives.Any(obj => obj.Name == archive.Name);
         }
     }
 }

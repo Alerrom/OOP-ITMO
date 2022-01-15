@@ -1,9 +1,11 @@
+using Backups.Entities.Vfs.Impl;
+
 namespace Backups.Entities.VfsAdapterSystem
 {
     public interface IVfsAdapter
     {
-        void AddDirectory(string path);
-        void AddFile(string path);
+        Directory AddDirectory(string path);
+        File AddFile(string path);
         void AddContentOnFile(string path, string content);
         string ReadContentOnFile(string path);
 

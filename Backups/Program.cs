@@ -27,13 +27,11 @@ namespace Backups
             adapter.AddContentOnFile(@"C:\programming\Aleksandr\dog.png", "pups");
             adapter.AddContentOnFile(@"C:\programming\Aleksandr\dog.png", "dogs");
 
-            var backupJob = new BackupJob(adapter, StorageType.Common);
+            var backupJob = new BackupJob(adapter, StorageType.Split);
             backupJob.AddJobObject(@"C:\programming\Aleksandr\dog.png");
             backupJob.AddJobObject(@"C:\programming\Aleksandr\cat.png");
             backupJob.CreateRestorePoint();
             backupJob.DeleteJobObject(@"C:\programming\Aleksandr\cat.png");
-
-            Console.WriteLine(adapter.ReadContentOnFile(@"C:\Backup\RestorePoint_2\dog.png_2"));
         }
     }
 }
