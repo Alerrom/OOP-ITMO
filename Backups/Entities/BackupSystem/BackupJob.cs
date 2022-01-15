@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Backups.Entities.RestoreObjects;
 using Backups.Entities.Vfs.Impl;
 using Backups.Entities.VfsAdapterSystem;
+using Backups.Tools;
 
 namespace Backups.Entities.BackupSystem
 {
@@ -44,6 +45,11 @@ namespace Backups.Entities.BackupSystem
 
         public void CreateRestorePoint()
         {
+            if (_jobObjects == null)
+            {
+                throw new BackupsException("You have no files in BackupJob");
+            }
+
             string name = "RestorePoint_" + (RestorePoints.Count + 1);
             var rp = new RestorePoint(name, _jobObjects, StorageType);
             RestorePoints.Add(rp);
